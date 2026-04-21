@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Crown,
@@ -3277,6 +3277,9 @@ const styles = `
   }
 `;
 
+const PAGE_TITLE = 'Какая средневековая профессия тебе подошла бы?';
+const PAGE_DESCRIPTION = 'Атмосферный средневековый тест-игра: путь, случайные сцены, скрытые архетипы, репутация города и неожиданные итоги.';
+
 export default function MedievalProfessionTestGame() {
   const [started, setStarted] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -3289,6 +3292,28 @@ export default function MedievalProfessionTestGame() {
   const [flags, setFlags] = useState([]);
   const [finished, setFinished] = useState(false);
   const [phase, setPhase] = useState('question');
+
+  useEffect(() => {
+    document.title = PAGE_TITLE;
+
+    const ensureMeta = (selector, attr, value, content) => {
+      let element = document.head.querySelector(selector);
+      if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attr, value);
+        document.head.appendChild(element);
+      }
+      element.setAttribute('content', content);
+    };
+
+    ensureMeta('meta[name="description"]', 'name', 'description', PAGE_DESCRIPTION);
+    ensureMeta('meta[property="og:title"]', 'property', 'og:title', PAGE_TITLE);
+    ensureMeta('meta[property="og:description"]', 'property', 'og:description', PAGE_DESCRIPTION);
+    ensureMeta('meta[property="og:type"]', 'property', 'og:type', 'website');
+    ensureMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+    ensureMeta('meta[name="twitter:title"]', 'name', 'twitter:title', PAGE_TITLE);
+    ensureMeta('meta[name="twitter:description"]', 'name', 'twitter:description', PAGE_DESCRIPTION);
+  }, []);
 
   const progress = ((current + (finished ? 1 : 0)) / questions.length) * 100;
   const result = useMemo(() => (finished ? scoreAnswers(answers) : null), [finished, answers]);
@@ -3490,7 +3515,7 @@ export default function MedievalProfessionTestGame() {
                 >
                   <div className="panel panel-stretch">
                     <div>
-                      <div className="eyebrow">Whimsy • Medieval • Red Tapestry</div>
+                      <div className="eyebrow">Тесты от Веры • Medieval • PipiCat</div>
                       <h1 className="title">Какая средневековая профессия тебе подошла бы?</h1>
                       <p className="lead">
                         Теперь это уже не просто тест, а маленькое приключение. Ты выбираешь путь, попадаешь в странные средневековые сцены, набираешь черты характера и к финалу можешь стать не только хронистом, лекарем или управителем, но и очень конкретной легендой с последствиями.
